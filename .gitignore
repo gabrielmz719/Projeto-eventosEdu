@@ -1,1 +1,12 @@
+# Ignorar o arquivo .env
 .env
+
+# Ignorar a pasta node_modules (caso esteja usando npm ou yarn)
+node_modules/
+
+# Ignorar arquivos de compilação TypeScript (caso você use)
+dist/
+build/
+
+# Ignorar arquivos do sistema operacional (no caso do macOS)
+.DS_Store
