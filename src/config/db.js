@@ -38,16 +38,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var pg_1 = require("pg");
 var dotenv = require("dotenv");
-dotenv.config();
-if (!process.env.DB_HOST || !process.env.DB_PORT || !process.env.DB_USER || !process.env.DB_PASSWORD || !process.env.DB_NAME) {
-    throw new Error("Faltam variáveis de ambiente para a configuração do banco de dados.");
-}
+var path_1 = require("path");
+dotenv.config({ path: path_1.default.resolve(__dirname, "../../.env") });
+var _a = process.env, DB_HOST = _a.DB_HOST, DB_PORT = _a.DB_PORT, DB_USER = _a.DB_USER, DB_PASSWORD = _a.DB_PASSWORD, DB_NAME = _a.DB_NAME;
 var pool = new pg_1.Pool({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    host: DB_HOST,
+    port: Number(DB_PORT),
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
 });
 function testConnection() {
     return __awaiter(this, void 0, void 0, function () {
