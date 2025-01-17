@@ -1,31 +1,30 @@
 import { Request, Response } from 'express';
 
+import { buscarPorEmail, criarUsuario } from '../models/userModel';
+import * as bcrypt from 'bcrypt';
 
-let users = [
-  { id: 1, name: 'João Silva', email: 'joao@example.com' },
-  { id: 2, name: 'Maria Oliveira', email: 'maria@example.com' },
-];
+export const registrarUsuário = async(req:Request ,res:Response)=>{
+  const {nome, email, senha}= req.body;
 
+  try{
+    const usuarioExistente = await buscarPorEmail(email);
+    if(usuarioExistente){
+      return res.status(400).json({error: "E-mail já cadastrado"});
+    }
+    //cria hash pra senha 
+    const hashedSenha = await bcrypt.hash(senha,10);
+    
+    //cria novo usuario
+    const novoUsuario = await criarUsuario(nome,email,hashedSenha);
+   
+    //removesenha do retorno
+    const {senha:_, ...usuarioSemSenha}= novoUsuario;
 
-export const getUsers = (req: Request, res: Response) => {
-  res.status(200).json(users);  
-};
+    //retorna usuario sem a senha 
+    res.status(201).json(usuarioSemSenha);
 
-
-export const createUser = (req: Request, res: Response) => {
-  const { name, email } = req.body;  
-
-  
-  if (!name || !email) {
-    return res.status(400).json({ message: 'Nome e email são obrigatórios!' });
+  }catch(error){
+    console.error(error);
+    res.status(500).json({ error: "erro ao registrar usuário"});
   }
-
-  
-  const newUser = { id: Date.now(), name, email };
-
- 
-  users.push(newUser);
-
-  
-  res.status(201).json(newUser);
 };
